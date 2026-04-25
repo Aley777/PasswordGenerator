@@ -220,3 +220,19 @@ input[type="range"] {
     font-size: 22px;
   }
 }
+
+.password-box button,
+.generate-btn,
+.check-btn {
+  transition: 0.2s ease;
+}
+
+.password-box button:hover,
+.generate-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.check-btn:hover {
+  transform: scale(1.06);
+}

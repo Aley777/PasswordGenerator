@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
   const [length, setLength] = useState(14);
   const [password, setPassword] = useState("a7K!qL2@zP9#eR");
+  const [copied, setCopied] = useState(false);
   const [options, setOptions] = useState({
     uppercase: true,
     lowercase: true,
@@ -53,8 +54,18 @@ function App() {
 
   const copyPassword = () => {
     if (!password || password === "En az bir seçenek seç") return;
+
     navigator.clipboard.writeText(password);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
   };
+
+  useEffect(() => {
+    generatePassword();
+  }, []);
 
   return (
     <main className="app">
@@ -66,7 +77,7 @@ function App() {
 
         <div className="password-box">
           <span>{password}</span>
-          <button onClick={copyPassword}>Kopyala</button>
+          <button onClick={copyPassword}>{copied ? "Kopyalandı" : "Kopyala"}</button>
         </div>
 
         <div className="length-box">
