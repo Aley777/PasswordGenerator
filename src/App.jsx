@@ -1,122 +1,121 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [length, setLength] = useState(14);
+  const [password, setPassword] = useState("a7K!qL2@zP9#eR");
+  const [options, setOptions] = useState({
+    uppercase: true,
+    lowercase: true,
+    numbers: true,
+    symbols: false,
+  });
+
+  const characters = {
+    uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    lowercase: "abcdefghijklmnopqrstuvwxyz",
+    numbers: "0123456789",
+    symbols: "!@#$%^&*()_+-=[]{}|;:,.<>?",
+  };
+
+  const optionItems = [
+    { key: "uppercase", icon: "Aa", title: "Büyük Harf", desc: "(A-Z)" },
+    { key: "lowercase", icon: "aa", title: "Küçük Harf", desc: "(a-z)" },
+    { key: "numbers", icon: "12", title: "Sayılar", desc: "(0-9)" },
+    { key: "symbols", icon: "!@", title: "Semboller", desc: "(!@#$...)" },
+  ];
+
+  const toggleOption = (key) => {
+    setOptions({ ...options, [key]: !options[key] });
+  };
+
+  const generatePassword = () => {
+    let pool = "";
+
+    Object.keys(options).forEach((key) => {
+      if (options[key]) pool += characters[key];
+    });
+
+    if (!pool) {
+      setPassword("En az bir seçenek seç");
+      return;
+    }
+
+    let newPassword = "";
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * pool.length);
+      newPassword += pool[randomIndex];
+    }
+
+    setPassword(newPassword);
+  };
+
+  const copyPassword = () => {
+    if (!password || password === "En az bir seçenek seç") return;
+    navigator.clipboard.writeText(password);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <main className="app">
+      <section className="card">
+        <div className="icon-box">🔒</div>
+
+        <h1>Password Generator</h1>
+        <p className="subtitle">Güvenli ve rastgele şifreler oluştur</p>
+
+        <div className="password-box">
+          <span>{password}</span>
+          <button onClick={copyPassword}>Kopyala</button>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+
+        <div className="length-box">
+          <div className="length-header">
+            <strong>Uzunluk:</strong>
+            <span>{length}</span>
+          </div>
+
+          <div className="range-row">
+            <small>6</small>
+            <input
+              type="range"
+              min="6"
+              max="32"
+              value={length}
+              onChange={(e) => setLength(Number(e.target.value))}
+            />
+            <small>32</small>
+          </div>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+
+        <div className="options-box">
+          <h2>Karakter Seçenekleri</h2>
+
+          {optionItems.map((item) => (
+            <div className="option-card" key={item.key}>
+              <div className="option-left">
+                <div className="option-icon">{item.icon}</div>
+                <p>
+                  {item.title} <span>{item.desc}</span>
+                </p>
+              </div>
+
+              <button
+                className={`check-btn ${options[item.key] ? "active" : ""}`}
+                onClick={() => toggleOption(item.key)}
+              >
+                ✓
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <button className="generate-btn" onClick={generatePassword}>
+          ✨ Şifre Üret
         </button>
       </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    </main>
+  );
 }
 
-export default App
+export default App;
