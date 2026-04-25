@@ -38,7 +38,7 @@ npm run dev
 
 ## Canlı Demo
 
-> (Deploy sonrası buraya Vercel linkini ekle)
+> https://password-generator-omega-azure.vercel.app/
 
 ## Proje Yapısı
 
