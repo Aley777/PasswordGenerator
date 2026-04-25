@@ -350,3 +350,12 @@ input[type="range"] {
   background: #e2e8f0;
   color: #0f172a;
 }
+
+.generate-btn:active {
+  transform: scale(0.97);
+}
+
+.password-box button:active,
+.history-item button:active {
+  transform: scale(0.95);
+}

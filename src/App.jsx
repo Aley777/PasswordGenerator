@@ -5,8 +5,15 @@ function App() {
   const [length, setLength] = useState(14);
   const [password, setPassword] = useState("");
   const [copied, setCopied] = useState(false);
-  const [theme, setTheme] = useState("dark");
-  const [history, setHistory] = useState([]);
+
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "dark";
+  });
+
+  const [history, setHistory] = useState(() => {
+    const savedHistory = localStorage.getItem("passwordHistory");
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
 
   const [options, setOptions] = useState({
     uppercase: true,
@@ -85,6 +92,14 @@ function App() {
   useEffect(() => {
     generatePassword();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("passwordHistory", JSON.stringify(history));
+  }, [history]);
 
   return (
     <main className={`app ${theme}`}>
