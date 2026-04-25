@@ -67,6 +67,22 @@ function App() {
     generatePassword();
   }, []);
 
+  const getStrength = () => {
+    let score = 0;
+
+    if (options.uppercase) score++;
+    if (options.lowercase) score++;
+    if (options.numbers) score++;
+    if (options.symbols) score++;
+
+    if (length >= 12) score++;
+    if (length >= 16) score++;
+
+    if (score <= 2) return { text: "Zayıf", color: "#ef4444" };
+    if (score <= 4) return { text: "Orta", color: "#f59e0b" };
+    return { text: "Güçlü", color: "#22c55e" };
+  };
+
   return (
     <main className="app">
       <section className="card">
@@ -78,6 +94,13 @@ function App() {
         <div className="password-box">
           <span>{password}</span>
           <button onClick={copyPassword}>{copied ? "Kopyalandı" : "Kopyala"}</button>
+        </div>
+
+        <div className="strength">
+          <span>Güç:</span>
+          <strong style={{ color: getStrength().color }}>
+            {getStrength().text}
+          </strong>
         </div>
 
         <div className="length-box">

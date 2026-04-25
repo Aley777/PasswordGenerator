@@ -236,3 +236,11 @@ input[type="range"] {
 .check-btn:hover {
   transform: scale(1.06);
 }
+
+.strength {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #cbd5e1;
+}
