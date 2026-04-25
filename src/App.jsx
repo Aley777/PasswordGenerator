@@ -37,6 +37,12 @@ function App() {
   ];
 
   const toggleOption = (key) => {
+    const activeOptions = Object.values(options).filter(Boolean).length;
+
+    if (options[key] && activeOptions === 1) {
+      return;
+    }
+
     setOptions({ ...options, [key]: !options[key] });
   };
 
