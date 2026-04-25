@@ -3,8 +3,11 @@ import "./App.css";
 
 function App() {
   const [length, setLength] = useState(14);
-  const [password, setPassword] = useState("a7K!qL2@zP9#eR");
+  const [password, setPassword] = useState("");
   const [copied, setCopied] = useState(false);
+  const [theme, setTheme] = useState("dark");
+  const [history, setHistory] = useState([]);
+
   const [options, setOptions] = useState({
     uppercase: true,
     lowercase: true,
@@ -50,22 +53,19 @@ function App() {
     }
 
     setPassword(newPassword);
+    setHistory((prev) => [newPassword, ...prev].slice(0, 5));
   };
 
-  const copyPassword = () => {
-    if (!password || password === "En az bir seçenek seç") return;
+  const copyText = (text) => {
+    if (!text || text === "En az bir seçenek seç") return;
 
-    navigator.clipboard.writeText(password);
+    navigator.clipboard.writeText(text);
     setCopied(true);
 
     setTimeout(() => {
       setCopied(false);
-    }, 1500);
+    }, 1800);
   };
-
-  useEffect(() => {
-    generatePassword();
-  }, []);
 
   const getStrength = () => {
     let score = 0;
@@ -74,7 +74,6 @@ function App() {
     if (options.lowercase) score++;
     if (options.numbers) score++;
     if (options.symbols) score++;
-
     if (length >= 12) score++;
     if (length >= 16) score++;
 
@@ -83,17 +82,32 @@ function App() {
     return { text: "Güçlü", color: "#22c55e" };
   };
 
+  useEffect(() => {
+    generatePassword();
+  }, []);
+
   return (
-    <main className="app">
+    <main className={`app ${theme}`}>
+      {copied && <div className="toast">Şifre kopyalandı ✅</div>}
+
       <section className="card">
-        <div className="icon-box">🔒</div>
+        <div className="top-bar">
+          <div className="icon-box">🔒</div>
+
+          <button
+            className="theme-toggle"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+          </button>
+        </div>
 
         <h1>Password Generator</h1>
         <p className="subtitle">Güvenli ve rastgele şifreler oluştur</p>
 
         <div className="password-box">
           <span>{password}</span>
-          <button onClick={copyPassword}>{copied ? "Kopyalandı" : "Kopyala"}</button>
+          <button onClick={() => copyText(password)}>Kopyala</button>
         </div>
 
         <div className="strength">
@@ -147,6 +161,19 @@ function App() {
         <button className="generate-btn" onClick={generatePassword}>
           ✨ Şifre Üret
         </button>
+
+        {history.length > 0 && (
+          <div className="history-box">
+            <h2>Son Üretilen Şifreler</h2>
+
+            {history.map((item, index) => (
+              <div className="history-item" key={index}>
+                <span>{item}</span>
+                <button onClick={() => copyText(item)}>Kopyala</button>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
